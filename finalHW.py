@@ -146,10 +146,10 @@ def travel(n,W):
 
 
 '''2-opt'''
-def cost_change(cost_mat, n1, n2, n3, n4):
-    return cost_mat[n1][n3] + cost_mat[n2][n4] - cost_mat[n1][n2] - cost_mat[n3][n4]
+def cost_change(matrix, n1, n2, n3, n4):
+    return matrix[n1][n3] + matrix[n2][n4] - matrix[n1][n2] - matrix[n3][n4]
 
-def two_opt(route, cost_mat):
+def two_opt(route, matrix):
     best = route
     improved = True
     while improved:
@@ -157,14 +157,14 @@ def two_opt(route, cost_mat):
         for i in range(1, len(route) - 2):
             for j in range(i + 1, len(route)):
                 if j - i == 1: continue
-                if cost_change(cost_mat, best[i - 1], best[i], best[j - 1], best[j]) < 0:
+                if cost_change(matrix, best[i - 1], best[i], best[j - 1], best[j]) < 0:
                     best[i:j] = best[j - 1:i - 1:-1]
                     improved = True
         route = best
     return best
 
-def cost(cost_mat, route):
-   return cost_mat[np.roll(route, 1), route].sum()         
+def cost(matrix, route):
+   return matrix[np.roll(route, 1), route].sum()         
 
  
 
@@ -176,7 +176,7 @@ Data4 = [] #平均誤差
 for i in range(4,21):    
     n=i
     
-    init_route = list(range(n))
+    all_vertice = list(range(n))
     
     W = np.random.randint(low = 1, high = 30, size=(n, n))
     for i in range(n):
@@ -197,7 +197,7 @@ for i in range(4,21):
     print('DPtime:',DPt,'\n')
 
     opt_start = time.time() 
-    best_route = two_opt(init_route, W) 
+    best_route = two_opt(all_vertice, W) 
     
     print('2-opt-mincost:',cost(W, best_route))
     opt_end = time.time()
